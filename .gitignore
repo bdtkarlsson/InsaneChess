@@ -1,0 +1,53 @@
+generated/
+
+# Bazel outputs
+/bazel-*
+
+# Gradle
+build/
+.gradle/
+bin/
+!cassandra/client-cli/bin/
+
+# Gradle autocomplete cache
+.gradletasknamecache
+
+# Eclipse
+.project
+.settings
+.classpath
+
+# IntelliJ
+*.iml
+*.ipr
+*.iws
+.idea
+out/
+
+# Python 
+*.pyc
+Pipfile.lock
+
+# Vim files
+*~
+*.swp
+*.swo
+
+*.DS_Store
+*.tar
+
+# VS Code
+# .vscode/
+
+# Git
+*.orig
+swagger.yaml
+
+tools/loadtest/tests/config.json
+FuncTestCoverage.txt
+minium/simcoe/tests/src/functionalTest/resources/config.json
+
+# FIX Gateway when running in IntelliJ
+log/
+store/
+**/node_modules/

@@ -1,0 +1,25 @@
+plugins {
+    id "nebula.facet" version "4.0.1"
+}
+
+apply plugin: 'nebula.facet'
+
+facets {
+    functionalTest {
+        testTaskName = "functionalTest"
+        parentSourceSet = 'test'
+        includeInCheckLifecycle = false
+    }
+}
+
+dependencies {
+    compile project(':insanechess:game')
+}
+
+functionalTest{
+    useJUnitPlatform()
+    outputs.upToDateWhen { false }
+}
+
+assemble.dependsOn compileFunctionalTestJava
+assemble.dependsOn compileFunctionalTestKotlin
