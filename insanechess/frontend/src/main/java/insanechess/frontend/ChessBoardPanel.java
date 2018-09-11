@@ -2,6 +2,7 @@ package insanechess.frontend;
 
 import insanechess.backend.ChessMove;
 import insanechess.backend.InsaneChessPosition;
+import insanechess.backend.constants.Player;
 import insanechess.game.InsaneChessController;
 
 import javax.imageio.ImageIO;
@@ -14,9 +15,10 @@ import java.awt.image.BufferedImage;
 import java.net.URL;
 import java.util.BitSet;
 
-import static insanechess.backend.ChessConstants.*;
-import static insanechess.backend.ChessConstants.Player.BLACK;
-import static insanechess.backend.ChessConstants.Player.WHITE;
+import static insanechess.backend.constants.Player.*;
+import static insanechess.backend.constants.Player.WHITE;
+import static insanechess.backend.constants.Validations.getIndexAtPosition;
+import static insanechess.backend.constants.Validations.getPositionAtIndex;
 
 public class ChessBoardPanel extends JPanel {
 
@@ -98,7 +100,7 @@ public class ChessBoardPanel extends JPanel {
 
 	private synchronized void squareClicked(Point p) {
 		if(!controller.isAIOn(controller.playerToMove())) {
-			if(getMarkedSquare() == null && ((pieceAt(p) == 0 && controller.playerToMove() == WHITE) || (pieceAt(p) == 1 && controller.playerToMove() == Player.BLACK))) {
+			if(getMarkedSquare() == null && ((pieceAt(p) == 0 && controller.playerToMove() == WHITE) || (pieceAt(p) == 1 && controller.playerToMove() == BLACK))) {
 				markSquare(p);
 			} else if (getMarkedSquare() != null) {
 				ChessMove move = new ChessMove(getIndexAtPosition(getMarkedSquare()), getIndexAtPosition(p));

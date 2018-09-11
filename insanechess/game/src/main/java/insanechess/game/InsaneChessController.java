@@ -1,8 +1,8 @@
 package insanechess.game;
 
-import insanechess.backend.ChessConstants.Player;
 import insanechess.backend.ChessMove;
 import insanechess.backend.InsaneChessPosition;
+import insanechess.backend.constants.Player;
 
 public class InsaneChessController{
 	private InsaneChessGame game;

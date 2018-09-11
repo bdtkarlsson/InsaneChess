@@ -1,18 +1,18 @@
 package insanechess.backend.pieces;
 
-import insanechess.backend.ChessConstants;
-import insanechess.backend.ChessConstants.Player;
 import insanechess.backend.ChessMove;
 import insanechess.backend.InsaneChessPosition;
+import insanechess.backend.constants.Player;
 
 import java.util.BitSet;
 
-import static insanechess.backend.ChessConstants.Player.BLACK;
-import static insanechess.backend.ChessConstants.Player.WHITE;
 import static insanechess.backend.constants.Files.FILE_A;
 import static insanechess.backend.constants.Files.FILE_H;
+import static insanechess.backend.constants.Player.BLACK;
+import static insanechess.backend.constants.Player.WHITE;
 import static insanechess.backend.constants.Ranks.RANK_2;
 import static insanechess.backend.constants.Ranks.RANK_7;
+import static insanechess.backend.constants.Validations.isValidTile;
 
 public final class Pawn{
 
@@ -47,7 +47,7 @@ public final class Pawn{
 		        .nextSetBit(pawnLocation + 1)) {
 
 			int candidateLocation = pawnLocation + pawnAdvance;
-			if (ChessConstants.isValidTile(candidateLocation) && 
+			if (isValidTile(candidateLocation) &&
 					!allPieces.get(candidateLocation)) {
 				model.addLegalMove(player, new ChessMove(pawnLocation,
 				        candidateLocation));
@@ -56,7 +56,7 @@ public final class Pawn{
 
 			candidateLocation = pawnLocation + pawnJump;
 
-			if (ChessConstants.isValidTile(candidateLocation) && 
+			if (isValidTile(candidateLocation) &&
 					!allPieces.get(candidateLocation) && !allPieces.get(pawnLocation + pawnAdvance) &&
 					beginRank.get(pawnLocation)) {
 				model.addLegalMove(player, new ChessMove(pawnLocation,
@@ -65,7 +65,7 @@ public final class Pawn{
 			}
 			
 			candidateLocation = pawnLocation + pawnAttackLeft;
-			if (ChessConstants.isValidTile(candidateLocation) && 
+			if (isValidTile(candidateLocation) &&
 					enemyPieces.get(candidateLocation) &&
 					!FILE_A.get(pawnLocation)) {
 				model.addLegalMove(player, new ChessMove(pawnLocation,
@@ -74,14 +74,13 @@ public final class Pawn{
 			}	
 			
 			candidateLocation = pawnLocation + pawnAttackRight;
-			if (ChessConstants.isValidTile(candidateLocation) && 
+			if (isValidTile(candidateLocation) &&
 					enemyPieces.get(candidateLocation) &&
 					!FILE_H.get(pawnLocation)) {
 				model.addLegalMove(player, new ChessMove(pawnLocation,
 				        candidateLocation));
 				model.addLegalLocation(player, candidateLocation);
 			}
-
 		}
 
 	}

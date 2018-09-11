@@ -1,9 +1,10 @@
 package insanechess.frontend;
 
-import insanechess.backend.ChessConstants;
 import insanechess.game.InsaneChessController;
 
 import javax.swing.*;
+
+import static insanechess.backend.constants.Player.WHITE;
 
 public class BackgroundWorker extends SwingWorker<Integer, String> {
 
@@ -59,7 +60,7 @@ public class BackgroundWorker extends SwingWorker<Integer, String> {
             String endgameText = "Game over: ";
             if(mate == 1) {
                 endgameText += "Game ended with checkmate. ";
-                if(chessController.playerToMove() == ChessConstants.Player.WHITE) {
+                if(chessController.playerToMove() == WHITE) {
                     endgameText += "Black wins.";
                 } else {
                     endgameText += "White wins.";

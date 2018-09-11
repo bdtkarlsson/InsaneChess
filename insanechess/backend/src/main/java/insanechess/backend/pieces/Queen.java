@@ -1,7 +1,7 @@
 package insanechess.backend.pieces;
 
-import insanechess.backend.ChessConstants.Player;
 import insanechess.backend.InsaneChessPosition;
+import insanechess.backend.constants.Player;
 
 import java.util.BitSet;
 

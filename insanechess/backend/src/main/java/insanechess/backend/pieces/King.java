@@ -1,16 +1,17 @@
 package insanechess.backend.pieces;
 
-import insanechess.backend.ChessConstants;
-import insanechess.backend.ChessConstants.Player;
+import insanechess.backend.constants.FullEmptySet;
 import insanechess.backend.ChessMove;
 import insanechess.backend.InsaneChessPosition;
+import insanechess.backend.constants.Player;
 
 import java.util.BitSet;
 
-import static insanechess.backend.ChessConstants.Player.BLACK;
-import static insanechess.backend.ChessConstants.Player.WHITE;
 import static insanechess.backend.constants.Files.FILE_A;
 import static insanechess.backend.constants.Files.FILE_H;
+import static insanechess.backend.constants.Player.BLACK;
+import static insanechess.backend.constants.Player.WHITE;
+import static insanechess.backend.constants.Validations.isValidTile;
 
 public final class King{
 
@@ -61,7 +62,7 @@ public final class King{
 			/*Left*/
 			int moveLocation = kingLocation - 1;
 			if (alliedPieces.get(kingLocation) && !FILE_A.get(kingLocation)
-					&& ChessConstants.isValidTile(moveLocation) && !alliedPieces.get(moveLocation)) {
+					&& isValidTile(moveLocation) && !alliedPieces.get(moveLocation)) {
 				model.addLegalMove(player, new ChessMove(kingLocation,
 						moveLocation));
 				model.addLegalLocation(player, moveLocation);
@@ -71,7 +72,7 @@ public final class King{
 			/*Right*/
 			moveLocation = kingLocation + 1;
 			if (alliedPieces.get(kingLocation) && !FILE_H.get(kingLocation)
-					&& ChessConstants.isValidTile(moveLocation) && !alliedPieces.get(moveLocation)) {
+					&& isValidTile(moveLocation) && !alliedPieces.get(moveLocation)) {
 				model.addLegalMove(player, new ChessMove(kingLocation,
 						moveLocation));
 				model.addLegalLocation(player, moveLocation);
@@ -80,8 +81,8 @@ public final class King{
 			}
 			/*Down*/
 			moveLocation = kingLocation + 8;
-			if (ChessConstants.isValidTile(moveLocation) && alliedPieces.get(kingLocation)
-					&& (ChessConstants.FULL_SET.get(moveLocation)) && !alliedPieces.get(moveLocation)) {
+			if (isValidTile(moveLocation) && alliedPieces.get(kingLocation)
+					&& (FullEmptySet.FULL_SET.get(moveLocation)) && !alliedPieces.get(moveLocation)) {
 				model.addLegalMove(player, new ChessMove(kingLocation,
 						moveLocation));
 				model.addLegalLocation(player, moveLocation);
@@ -91,8 +92,8 @@ public final class King{
 
 			/*Up*/
 			moveLocation = kingLocation - 8;
-			if (ChessConstants.isValidTile(moveLocation) && alliedPieces.get(kingLocation)
-					&& (ChessConstants.FULL_SET.get(moveLocation)) && !alliedPieces.get(moveLocation)) {
+			if (isValidTile(moveLocation) && alliedPieces.get(kingLocation)
+					&& (FullEmptySet.FULL_SET.get(moveLocation)) && !alliedPieces.get(moveLocation)) {
 				model.addLegalMove(player, new ChessMove(kingLocation,
 						moveLocation));
 				model.addLegalLocation(player, moveLocation);
@@ -103,7 +104,7 @@ public final class King{
 			/*Up and right*/
 			moveLocation = kingLocation - 7;
 			if (alliedPieces.get(kingLocation) && !FILE_H.get(kingLocation)
-					&& ChessConstants.isValidTile(moveLocation) && !alliedPieces.get(moveLocation)) {
+					&& isValidTile(moveLocation) && !alliedPieces.get(moveLocation)) {
 				model.addLegalMove(player, new ChessMove(kingLocation,
 						moveLocation));
 				model.addLegalLocation(player, moveLocation);
@@ -114,7 +115,7 @@ public final class King{
 			/*Down and right*/
 			moveLocation = kingLocation + 9;
 			if (alliedPieces.get(kingLocation) && !FILE_H.get(kingLocation)
-					&& ChessConstants.isValidTile(moveLocation) && !alliedPieces.get(moveLocation)) {
+					&& isValidTile(moveLocation) && !alliedPieces.get(moveLocation)) {
 				model.addLegalMove(player, new ChessMove(kingLocation,
 						moveLocation));
 				model.addLegalLocation(player, moveLocation);
@@ -125,7 +126,7 @@ public final class King{
 			/*Up and left*/
 			moveLocation = kingLocation - 9;
 			if (alliedPieces.get(kingLocation) && !FILE_A.get(kingLocation)
-					&& ChessConstants.isValidTile(moveLocation) && !alliedPieces.get(moveLocation)) {
+					&& isValidTile(moveLocation) && !alliedPieces.get(moveLocation)) {
 				model.addLegalMove(player, new ChessMove(kingLocation,
 						moveLocation));
 				model.addLegalLocation(player, moveLocation);
@@ -136,14 +137,11 @@ public final class King{
 			/*Down and left*/
 			moveLocation = kingLocation + 7;
 			if (alliedPieces.get(kingLocation) && !FILE_A.get(kingLocation)
-					&& ChessConstants.isValidTile(moveLocation) && !alliedPieces.get(moveLocation)) {
+					&& isValidTile(moveLocation) && !alliedPieces.get(moveLocation)) {
 				model.addLegalMove(player, new ChessMove(kingLocation,
 						moveLocation));
 				model.addLegalLocation(player, moveLocation);
-
-
-			}	
-
+			}
 		}
 	}
 }

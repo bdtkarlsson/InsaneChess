@@ -5,8 +5,8 @@ import insanechess.game.InsaneChessController;
 import javax.swing.*;
 import java.awt.*;
 
-import static insanechess.backend.ChessConstants.Player.BLACK;
-import static insanechess.backend.ChessConstants.Player.WHITE;
+import static insanechess.backend.constants.Player.BLACK;
+import static insanechess.backend.constants.Player.WHITE;
 
 class SettingsWindow {
 	

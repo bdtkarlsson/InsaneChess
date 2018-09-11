@@ -6,8 +6,8 @@ import insanechess.ai.NegaMaxAlphaBetaAlgorithm;
 import insanechess.backend.ChessMove;
 import insanechess.backend.InsaneChessPosition;
 
-import static insanechess.backend.ChessConstants.Player.BLACK;
-import static insanechess.backend.ChessConstants.Player.WHITE;
+import static insanechess.backend.constants.Player.BLACK;
+import static insanechess.backend.constants.Player.WHITE;
 
 public class InsaneChessGame {
 

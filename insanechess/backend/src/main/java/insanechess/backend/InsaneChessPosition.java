@@ -1,14 +1,14 @@
 package insanechess.backend;
 
+import insanechess.backend.constants.Player;
 import insanechess.backend.pieces.*;
 
 import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.Objects;
 
-import static insanechess.backend.ChessConstants.*;
-import static insanechess.backend.ChessConstants.Player.BLACK;
-import static insanechess.backend.ChessConstants.Player.WHITE;
+import static insanechess.backend.constants.Player.BLACK;
+import static insanechess.backend.constants.Player.WHITE;
 import static insanechess.backend.constants.Ranks.*;
 
 

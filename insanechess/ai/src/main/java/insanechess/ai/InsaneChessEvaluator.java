@@ -1,15 +1,12 @@
 package insanechess.ai;
 
-import insanechess.backend.ChessConstants;
 import insanechess.backend.InsaneChessPosition;
 
 import java.util.BitSet;
 
-import static insanechess.backend.ChessConstants.Player.BLACK;
-import static insanechess.backend.ChessConstants.Player.WHITE;
-import static insanechess.backend.constants.Files.ALL_FILES;
-import static insanechess.backend.constants.Files.FILE_A;
-import static insanechess.backend.constants.Files.FILE_H;
+import static insanechess.backend.constants.Files.*;
+import static insanechess.backend.constants.Player.BLACK;
+import static insanechess.backend.constants.Player.WHITE;
 
 /**
  * The chess model is evaluated with several different measurements. The number of legal moves, piece values,

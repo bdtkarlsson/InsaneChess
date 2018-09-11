@@ -2,10 +2,10 @@ package insanechess.backend.pieces;
 
 import insanechess.backend.ChessMove;
 import insanechess.backend.InsaneChessPosition;
+import insanechess.backend.constants.Player;
 
 import java.util.BitSet;
 
-import static insanechess.backend.ChessConstants.*;
 import static insanechess.backend.constants.Files.ALL_FILES;
 import static insanechess.backend.constants.Ranks.ALL_RANKS;
 

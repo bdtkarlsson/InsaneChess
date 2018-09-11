@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-import static insanechess.backend.ChessConstants.Player.WHITE;
+import static insanechess.backend.constants.Player.WHITE;
 
 public class NegaMaxAlphaBetaTTAlgorithm implements ChessAlgorithm {
 
