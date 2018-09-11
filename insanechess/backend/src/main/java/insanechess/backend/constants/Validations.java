@@ -10,9 +10,9 @@ public class Validations {
 
     static {
         int i = 0;
-        for(int y=0; y<8; y++) {
-            for(int x=0; x<8; x++) {
-                indexToPosition[i] = new Point(x,y);
+        for(int y = 0; y < 8; y++) {
+            for(int x = 0; x < 8; x++) {
+                indexToPosition[i] = new Point(x, y);
                 positionToIndex[y][x] = i;
                 i++;
             }
