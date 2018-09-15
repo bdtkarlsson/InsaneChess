@@ -1,4 +1,4 @@
-package insanechess.ai;
+package insanechess.ai.evaluators;
 
 import insanechess.backend.InsaneChessPosition;
 

@@ -26,33 +26,26 @@ public final class King{
 
 		if(kingLocation != -1) {
 
-			/*Castling*/
-			if(player == WHITE && model.isWhiteShortCastlingLegal() && !allPieces.get(61) && !allPieces.get(62)) {
-				model.addLegalMove(player, new ChessMove(kingLocation,
-						63));
+			if(isWhiteShortCastling(player, model, allPieces)) {
+				model.addLegalMove(player, new ChessMove(kingLocation, 63));
 				model.addLegalLocation(player, 62);
 				model.addLegalLocation(player, 61);
 			} 
 			
-			if (player == WHITE && model.isWhiteLongCastlingLegal() && !allPieces.get(57) && !allPieces.get(58) &&
-					!allPieces.get(59)) {
-				model.addLegalMove(player, new ChessMove(kingLocation,
-						56));
+			if (isWhiteLongCastling(player, model, allPieces)) {
+				model.addLegalMove(player, new ChessMove(kingLocation, 56));
 				model.addLegalLocation(player, 58);
 				model.addLegalLocation(player, 59);
 			} 
 			
-			if (player == BLACK && model.isBlackShortCastlingLegal() && !allPieces.get(5) && !allPieces.get(6)) {
-				model.addLegalMove(player, new ChessMove(kingLocation,
-						7));
+			if (isBlackShortCastling(player, model, allPieces)) {
+				model.addLegalMove(player, new ChessMove(kingLocation, 7));
 				model.addLegalLocation(player, 5);
 				model.addLegalLocation(player, 6);
 			} 
 			
-			if (player == BLACK && model.isBlackLongCastlingLegal() && !allPieces.get(1) && !allPieces.get(2) &&
-					!allPieces.get(3)) {
-				model.addLegalMove(player, new ChessMove(kingLocation,
-						0));
+			if (isBlackLongCastling(player, model, allPieces)) {
+				model.addLegalMove(player, new ChessMove(kingLocation, 0));
 				model.addLegalLocation(player, 2);
 				model.addLegalLocation(player, 3);
 			}
@@ -60,88 +53,80 @@ public final class King{
 			/*Regular king moves*/
 
 			/*Left*/
-			int moveLocation = kingLocation - 1;
-			if (alliedPieces.get(kingLocation) && !FILE_A.get(kingLocation)
-					&& isValidTile(moveLocation) && !alliedPieces.get(moveLocation)) {
-				model.addLegalMove(player, new ChessMove(kingLocation,
-						moveLocation));
-				model.addLegalLocation(player, moveLocation);
-
-
+			int possibleTargetLocation = kingLocation - 1;
+			if (isValidTargetTile(alliedPieces, possibleTargetLocation) && !FILE_A.get(kingLocation)) {
+				addRegularKingMove(player, model, kingLocation, possibleTargetLocation);
 			}
+
 			/*Right*/
-			moveLocation = kingLocation + 1;
-			if (alliedPieces.get(kingLocation) && !FILE_H.get(kingLocation)
-					&& isValidTile(moveLocation) && !alliedPieces.get(moveLocation)) {
-				model.addLegalMove(player, new ChessMove(kingLocation,
-						moveLocation));
-				model.addLegalLocation(player, moveLocation);
-
-
+			possibleTargetLocation = kingLocation + 1;
+			if (isValidTargetTile(alliedPieces, possibleTargetLocation) && !FILE_H.get(kingLocation)) {
+				addRegularKingMove(player, model, kingLocation, possibleTargetLocation);
 			}
+
 			/*Down*/
-			moveLocation = kingLocation + 8;
-			if (isValidTile(moveLocation) && alliedPieces.get(kingLocation)
-					&& (FullEmptySet.FULL_SET.get(moveLocation)) && !alliedPieces.get(moveLocation)) {
-				model.addLegalMove(player, new ChessMove(kingLocation,
-						moveLocation));
-				model.addLegalLocation(player, moveLocation);
-
-
+			possibleTargetLocation = kingLocation + 8;
+			if (isValidTargetTile(alliedPieces, possibleTargetLocation) && FullEmptySet.FULL_SET.get(possibleTargetLocation)) {
+				addRegularKingMove(player, model, kingLocation, possibleTargetLocation);
 			}
 
 			/*Up*/
-			moveLocation = kingLocation - 8;
-			if (isValidTile(moveLocation) && alliedPieces.get(kingLocation)
-					&& (FullEmptySet.FULL_SET.get(moveLocation)) && !alliedPieces.get(moveLocation)) {
-				model.addLegalMove(player, new ChessMove(kingLocation,
-						moveLocation));
-				model.addLegalLocation(player, moveLocation);
-
-
+			possibleTargetLocation = kingLocation - 8;
+			if (isValidTargetTile(alliedPieces, possibleTargetLocation) && FullEmptySet.FULL_SET.get(possibleTargetLocation)) {
+				addRegularKingMove(player, model, kingLocation, possibleTargetLocation);
 			}
 
 			/*Up and right*/
-			moveLocation = kingLocation - 7;
-			if (alliedPieces.get(kingLocation) && !FILE_H.get(kingLocation)
-					&& isValidTile(moveLocation) && !alliedPieces.get(moveLocation)) {
-				model.addLegalMove(player, new ChessMove(kingLocation,
-						moveLocation));
-				model.addLegalLocation(player, moveLocation);
-
-
+			possibleTargetLocation = kingLocation - 7;
+			if (isValidTargetTile(alliedPieces, possibleTargetLocation) && !FILE_H.get(kingLocation)) {
+				addRegularKingMove(player, model, kingLocation, possibleTargetLocation);
 			}
 
 			/*Down and right*/
-			moveLocation = kingLocation + 9;
-			if (alliedPieces.get(kingLocation) && !FILE_H.get(kingLocation)
-					&& isValidTile(moveLocation) && !alliedPieces.get(moveLocation)) {
-				model.addLegalMove(player, new ChessMove(kingLocation,
-						moveLocation));
-				model.addLegalLocation(player, moveLocation);
-
-
+			possibleTargetLocation = kingLocation + 9;
+			if (isValidTargetTile(alliedPieces, possibleTargetLocation) && !FILE_H.get(kingLocation)) {
+				addRegularKingMove(player, model, kingLocation, possibleTargetLocation);
 			}
 
 			/*Up and left*/
-			moveLocation = kingLocation - 9;
-			if (alliedPieces.get(kingLocation) && !FILE_A.get(kingLocation)
-					&& isValidTile(moveLocation) && !alliedPieces.get(moveLocation)) {
-				model.addLegalMove(player, new ChessMove(kingLocation,
-						moveLocation));
-				model.addLegalLocation(player, moveLocation);
-
-
+			possibleTargetLocation = kingLocation - 9;
+			if (isValidTargetTile(alliedPieces, possibleTargetLocation) && !FILE_A.get(kingLocation)) {
+				addRegularKingMove(player, model, kingLocation, possibleTargetLocation);
 			}
 
 			/*Down and left*/
-			moveLocation = kingLocation + 7;
-			if (alliedPieces.get(kingLocation) && !FILE_A.get(kingLocation)
-					&& isValidTile(moveLocation) && !alliedPieces.get(moveLocation)) {
-				model.addLegalMove(player, new ChessMove(kingLocation,
-						moveLocation));
-				model.addLegalLocation(player, moveLocation);
+			possibleTargetLocation = kingLocation + 7;
+			if (isValidTargetTile(alliedPieces, possibleTargetLocation) && !FILE_A.get(kingLocation)) {
+				addRegularKingMove(player, model, kingLocation, possibleTargetLocation);
 			}
 		}
+	}
+
+	private static boolean isValidTargetTile(BitSet alliedPieces, int possibleTargetLocation) {
+		return isValidTile(possibleTargetLocation) && !alliedPieces.get(possibleTargetLocation);
+	}
+
+	private static void addRegularKingMove(Player player, InsaneChessPosition model, int kingLocation, int possibleTargetLocation) {
+		model.addLegalMove(player, new ChessMove(kingLocation,
+				possibleTargetLocation));
+		model.addLegalLocation(player, possibleTargetLocation);
+	}
+
+	private static boolean isBlackLongCastling(Player player, InsaneChessPosition model, BitSet allPieces) {
+		return player == BLACK && model.isBlackLongCastlingLegal() && !allPieces.get(1) && !allPieces.get(2) &&
+				!allPieces.get(3);
+	}
+
+	private static boolean isBlackShortCastling(Player player, InsaneChessPosition model, BitSet allPieces) {
+		return player == BLACK && model.isBlackShortCastlingLegal() && !allPieces.get(5) && !allPieces.get(6);
+	}
+
+	private static boolean isWhiteLongCastling(Player player, InsaneChessPosition model, BitSet allPieces) {
+		return player == WHITE && model.isWhiteLongCastlingLegal() && !allPieces.get(57) && !allPieces.get(58) &&
+				!allPieces.get(59);
+	}
+
+	private static boolean isWhiteShortCastling(Player player, InsaneChessPosition model, BitSet allPieces) {
+		return player == WHITE && model.isWhiteShortCastlingLegal() && !allPieces.get(61) && !allPieces.get(62);
 	}
 }

@@ -142,116 +142,48 @@ public class InsaneChessPosition {
 
 		//If player is white and move is legal
 		if(playerToMove == WHITE && whiteLegalMoves.contains(move)) {
-			if(whiteRooks.get(move.getFrom())) {// if piece to move is a rook
+			if(whiteRooks.get(move.getFrom())) {
 				moveWhiteRook(move, moveBitSet, modelCopy);
-			} else if(whiteKnights.get(move.getFrom())) {// if piece to move is a knight
+			} else if(whiteKnights.get(move.getFrom())) {
 				moveKnight(moveBitSet, modelCopy, WHITE);
-			} else if(whiteBishops.get(move.getFrom())) {// if piece to move is a bishop
+			} else if(whiteBishops.get(move.getFrom())) {
 				moveBishop(moveBitSet, modelCopy, WHITE);
-			} else if (whiteKing.get(move.getFrom()) && !(move.getFrom() == 60 && (move.getTo() == 63 || 
-					move.getTo() == 56))) {// if piece to move is a king (no castling)
+			} else if (whiteKing.get(move.getFrom()) && !isWhiteCastlingAttempt(move)) {
 				moveWhiteKing(moveBitSet, modelCopy);
-			} else if(whiteKing.get(move.getFrom()) && isWhiteShortCastlingLegal() && move.getTo() == 63
-					&& !blackLegalLocations.get(60) && !blackLegalLocations.get(61) &&
-					!blackLegalLocations.get(62)) {// if move is short castling
+			} else if(whiteKing.get(move.getFrom()) && whiteShortCastlingPossible(move)) {
 				moveWhiteKingShortCastling(modelCopy);
-			} else if(whiteKing.get(move.getFrom()) && isWhiteLongCastlingLegal() && move.getTo() == 56
-					&& !blackLegalLocations.get(58) && !blackLegalLocations.get(59)
-					&& !blackLegalLocations.get(60)) {// if move is long castling
+			} else if(whiteKing.get(move.getFrom()) && whiteLongCastlingPossible(move)) {
 				moveWhiteKingLongCastling(modelCopy);
-			}
-			else if(whiteQueens.get(move.getFrom())) {// if piece to move is a queen
+			} else if(whiteQueens.get(move.getFrom())) {
 				moveQueen(moveBitSet, modelCopy, WHITE);
-			} else if(whitePawns.get(move.getFrom())) {// if piece to move is a pawn
+			} else if(whitePawns.get(move.getFrom())) {
 				moveWhitePawn(move, moveBitSet, modelCopy);
-			} else {// no match
+			} else {
 				return null;
 			}
-			//Remove attacked enemy pieces
-			if(blackRooks.get(move.getTo())) {
-				modelCopy.getRooks(BLACK).flip(move.getTo());
-			} else if(blackKnights.get(move.getTo())) {
-				modelCopy.getKnights(BLACK).flip(move.getTo());
-			} else if(blackBishops.get(move.getTo())) {
-				modelCopy.getBishops(BLACK).flip(move.getTo());
-			} else if(blackKing.get(move.getTo())) {
-				modelCopy.getKing(BLACK).flip(move.getTo());
-			} else if(blackQueens.get(move.getTo())) {
-				modelCopy.getQueens(BLACK).flip(move.getTo());
-			} else if(blackPawns.get(move.getTo())) {
-				modelCopy.getPawns(BLACK).flip(move.getTo());
-			}
-		//If player is black and move is legal
+			removeBlackAttackedPieces(move, modelCopy);
 		} else if (playerToMove == BLACK && blackLegalMoves.contains(move)) {
-
-			if(blackRooks.get(move.getFrom())) {// If piece to move is a rook
-				modelCopy.getRooks(BLACK).xor(moveBitSet);
-				if(move.getFrom() == 7) {// disable short castling
-					modelCopy.setBlackShortCastlingLegal(false);
-				} else if(move.getFrom() == 0) {// disable long castling
-					modelCopy.setBlackLongCastlingLegal(false);
-				}
-			} else if(blackKnights.get(move.getFrom())) {// If piece to move is a knight
+			if(blackRooks.get(move.getFrom())) {
+				moveBlackRook(move, moveBitSet, modelCopy);
+			} else if(blackKnights.get(move.getFrom())) {
 				moveKnight(moveBitSet, modelCopy, BLACK);
-			} else if(blackBishops.get(move.getFrom())) {// If piece to move is a bishop
+			} else if(blackBishops.get(move.getFrom())) {
 				moveBishop(moveBitSet, modelCopy, BLACK);
-			} else if (blackKing.get(move.getFrom()) && !(move.getFrom() == 4 && (move.getTo() == 7 || 
-					move.getTo() == 0))) {// if piece to move is a king (no castling)
-				modelCopy.getKing(BLACK).xor(moveBitSet);
-				modelCopy.setBlackLongCastlingLegal(false);
-				modelCopy.setBlackShortCastlingLegal(false);
-			}  else if(blackKing.get(move.getFrom()) && isBlackShortCastlingLegal()  && move.getTo() == 7
-					&& !whiteLegalLocations.get(4) && !whiteLegalLocations.get(5)
-					&& !whiteLegalLocations.get(6)) {// short castling
-				modelCopy.getKing(BLACK).flip(4);
-				modelCopy.getKing(BLACK).flip(6);
-				modelCopy.getRooks(BLACK).flip(7);
-				modelCopy.getRooks(BLACK).flip(5);
-				modelCopy.setBlackLongCastlingLegal(false);
-				modelCopy.setBlackShortCastlingLegal(false);
-			} else if(blackKing.get(move.getFrom()) && isBlackLongCastlingLegal() && move.getTo() == 0
-					&& !whiteLegalLocations.get(4) && !whiteLegalLocations.get(3) && !whiteLegalLocations.get(2)
-					) {//long castling
-				modelCopy.getKing(BLACK).flip(4);
-				modelCopy.getKing(BLACK).flip(2);
-				modelCopy.getRooks(BLACK).flip(0);
-				modelCopy.getRooks(BLACK).flip(3);
-				modelCopy.setBlackLongCastlingLegal(false);
-				modelCopy.setBlackShortCastlingLegal(false);
-			} else if(blackQueens.get(move.getFrom())) {// If piece to move is a queen
+			} else if (blackKing.get(move.getFrom()) && !isBlackCastlingAttempt(move)) {
+				moveBlackKing(moveBitSet, modelCopy);
+			}  else if(blackKing.get(move.getFrom()) && isBlackShortCastlingPossible(move)) {
+				moveBlackKingShortCastling(modelCopy);
+			} else if(blackKing.get(move.getFrom()) && isBlackLongCastlingPossible(move)) {
+				moveBlackKingLongCastling(modelCopy);
+			} else if(blackQueens.get(move.getFrom())) {
 				moveQueen(moveBitSet, modelCopy, BLACK);
-			} else if(blackPawns.get(move.getFrom())) {// If piece to move is a pawn
-				if(RANK_1.get(move.getTo())) {// promotion
-					modelCopy.getPawns(BLACK).flip(move.getFrom());
-					modelCopy.getQueens(BLACK).flip(move.getTo());
-				} else if(RANK_7.get(move.getFrom())
-						&& RANK_5.get(move.getTo())) {// en passant created
-					modelCopy.getPawns(BLACK).xor(moveBitSet);
-					modelCopy.getEnPassants(BLACK).set(move.getFrom() + 8);
-				}  else {// regular pawn move
-					modelCopy.getPawns(BLACK).xor(moveBitSet);
-					if(getEnPassants(WHITE).get(move.getTo())) {// en passant attacked
-						modelCopy.getPawns(WHITE).flip(move.getTo() - 8);
-					}
-				}
-			} else {// no match
+			} else if(blackPawns.get(move.getFrom())) {
+				moveBlackPawn(move, moveBitSet, modelCopy);
+			} else {
 				return null;
 			}
-			//Remove attacked enemy pieces
-			if(whiteRooks.get(move.getTo())) {
-				modelCopy.getRooks(WHITE).flip(move.getTo());
-			} else if(whiteKnights.get(move.getTo())) {
-				modelCopy.getKnights(WHITE).flip(move.getTo());
-			} else if(whiteBishops.get(move.getTo())) {
-				modelCopy.getBishops(WHITE).flip(move.getTo());
-			} else if(whiteKing.get(move.getTo())) {
-				modelCopy.getKing(WHITE).flip(move.getTo());
-			} else if(whiteQueens.get(move.getTo())) {
-				modelCopy.getQueens(WHITE).flip(move.getTo());
-			} else if(whitePawns.get(move.getTo())) {
-				modelCopy.getPawns(WHITE).flip(move.getTo());
-			}
-		} else {//no match
+			removeWhiteAttackedPieces(move, modelCopy);
+		} else {
 			return null;
 		}
 
@@ -263,6 +195,119 @@ public class InsaneChessPosition {
 		//Move was legal, swithh player and return next position
 		modelCopy.switchPlayerToMove();
 		return modelCopy;
+	}
+
+	private boolean isBlackLongCastlingPossible(ChessMove move) {
+		return move.getFrom() == 4 && move.getTo() == 0 && isBlackLongCastlingLegal()
+				&& !whiteLegalLocations.get(4) && !whiteLegalLocations.get(3) && !whiteLegalLocations.get(2);
+	}
+
+	private boolean isBlackShortCastlingPossible(ChessMove move) {
+		return move.getFrom() == 4 && move.getTo() == 7 && isBlackShortCastlingLegal()
+				&& !whiteLegalLocations.get(4) && !whiteLegalLocations.get(5)
+				&& !whiteLegalLocations.get(6);
+	}
+
+	private boolean isBlackCastlingAttempt(ChessMove move) {
+		return move.getFrom() == 4 && (move.getTo() == 7 ||
+				move.getTo() == 0);
+	}
+
+	private boolean isWhiteCastlingAttempt(ChessMove move) {
+		return move.getFrom() == 60 && (move.getTo() == 63 || move.getTo() == 56);
+	}
+
+	private boolean whiteLongCastlingPossible(ChessMove move) {
+		return isWhiteLongCastlingLegal() && move.getFrom() == 60 && move.getTo() == 63
+				&& !blackLegalLocations.get(58) && !blackLegalLocations.get(59)
+				&& !blackLegalLocations.get(60);
+	}
+
+	private boolean whiteShortCastlingPossible(ChessMove move) {
+		return isWhiteShortCastlingLegal() && move.getFrom() == 60 && move.getTo() == 63
+				&& !blackLegalLocations.get(60) && !blackLegalLocations.get(61) &&
+				!blackLegalLocations.get(62);
+	}
+
+	private void removeWhiteAttackedPieces(ChessMove move, InsaneChessPosition modelCopy) {
+		if(whiteRooks.get(move.getTo())) {
+			modelCopy.getRooks(WHITE).flip(move.getTo());
+		} else if(whiteKnights.get(move.getTo())) {
+			modelCopy.getKnights(WHITE).flip(move.getTo());
+		} else if(whiteBishops.get(move.getTo())) {
+			modelCopy.getBishops(WHITE).flip(move.getTo());
+		} else if(whiteKing.get(move.getTo())) {
+			modelCopy.getKing(WHITE).flip(move.getTo());
+		} else if(whiteQueens.get(move.getTo())) {
+			modelCopy.getQueens(WHITE).flip(move.getTo());
+		} else if(whitePawns.get(move.getTo())) {
+			modelCopy.getPawns(WHITE).flip(move.getTo());
+		}
+	}
+
+	private void moveBlackPawn(ChessMove move, BitSet moveBitSet, InsaneChessPosition modelCopy) {
+		if(RANK_1.get(move.getTo())) {// promotion
+			modelCopy.getPawns(BLACK).flip(move.getFrom());
+			modelCopy.getQueens(BLACK).flip(move.getTo());
+		} else if(RANK_7.get(move.getFrom())
+				&& RANK_5.get(move.getTo())) {// en passant created
+			modelCopy.getPawns(BLACK).xor(moveBitSet);
+			modelCopy.getEnPassants(BLACK).set(move.getFrom() + 8);
+		}  else {// regular pawn move
+			modelCopy.getPawns(BLACK).xor(moveBitSet);
+			if(getEnPassants(WHITE).get(move.getTo())) {// en passant attacked
+				modelCopy.getPawns(WHITE).flip(move.getTo() - 8);
+			}
+		}
+	}
+
+	private void moveBlackKingLongCastling(InsaneChessPosition modelCopy) {
+		modelCopy.getKing(BLACK).flip(4);
+		modelCopy.getKing(BLACK).flip(2);
+		modelCopy.getRooks(BLACK).flip(0);
+		modelCopy.getRooks(BLACK).flip(3);
+		modelCopy.setBlackLongCastlingLegal(false);
+		modelCopy.setBlackShortCastlingLegal(false);
+	}
+
+	private void moveBlackKingShortCastling(InsaneChessPosition modelCopy) {
+		modelCopy.getKing(BLACK).flip(4);
+		modelCopy.getKing(BLACK).flip(6);
+		modelCopy.getRooks(BLACK).flip(7);
+		modelCopy.getRooks(BLACK).flip(5);
+		modelCopy.setBlackLongCastlingLegal(false);
+		modelCopy.setBlackShortCastlingLegal(false);
+	}
+
+	private void moveBlackKing(BitSet moveBitSet, InsaneChessPosition modelCopy) {
+		modelCopy.getKing(BLACK).xor(moveBitSet);
+		modelCopy.setBlackLongCastlingLegal(false);
+		modelCopy.setBlackShortCastlingLegal(false);
+	}
+
+	private void moveBlackRook(ChessMove move, BitSet moveBitSet, InsaneChessPosition modelCopy) {
+		modelCopy.getRooks(BLACK).xor(moveBitSet);
+		if(move.getFrom() == 7) {// disable short castling
+			modelCopy.setBlackShortCastlingLegal(false);
+		} else if(move.getFrom() == 0) {// disable long castling
+			modelCopy.setBlackLongCastlingLegal(false);
+		}
+	}
+
+	private void removeBlackAttackedPieces(ChessMove move, InsaneChessPosition modelCopy) {
+		if(blackRooks.get(move.getTo())) {
+			modelCopy.getRooks(BLACK).flip(move.getTo());
+		} else if(blackKnights.get(move.getTo())) {
+			modelCopy.getKnights(BLACK).flip(move.getTo());
+		} else if(blackBishops.get(move.getTo())) {
+			modelCopy.getBishops(BLACK).flip(move.getTo());
+		} else if(blackKing.get(move.getTo())) {
+			modelCopy.getKing(BLACK).flip(move.getTo());
+		} else if(blackQueens.get(move.getTo())) {
+			modelCopy.getQueens(BLACK).flip(move.getTo());
+		} else if(blackPawns.get(move.getTo())) {
+			modelCopy.getPawns(BLACK).flip(move.getTo());
+		}
 	}
 
 	private void moveWhitePawn(ChessMove move, BitSet moveBitSet, InsaneChessPosition modelCopy) {
@@ -319,15 +364,14 @@ public class InsaneChessPosition {
 
 	private void moveWhiteRook(ChessMove move, BitSet moveBitSet, InsaneChessPosition modelCopy) {
 		modelCopy.getRooks(WHITE).xor(moveBitSet);
-		if(move.getFrom() == 56) {// disable short castling
+		if(move.getFrom() == 56) {
 			modelCopy.setWhiteLongCastlingLegal(false);
-		} else if(move.getFrom() == 63) {// disable long castling
+		} else if(move.getFrom() == 63) {
 			modelCopy.setWhiteShortCastlingLegal(false);
 		}
 	}
 
 	private void calculateLegalMoves() {
-
 		whiteLegalLocations = new BitSet();
 		blackLegalLocations = new BitSet();
 		blackLegalMoves = new ArrayList<>();
@@ -346,6 +390,46 @@ public class InsaneChessPosition {
 		Pawn.calculateLegalMoves(BLACK, this);
 	}
 
+	private boolean isCheck(Player player) {
+		int kingPosition;
+		if(player == WHITE) {
+			kingPosition = whiteKing.nextSetBit(0);
+			if(kingPosition != -1) {
+				return blackLegalLocations.get(kingPosition);
+			}
+		} else {
+			kingPosition = blackKing.nextSetBit(0);
+			if(kingPosition != -1) {
+				return whiteLegalLocations.get(kingPosition);
+			}
+		}
+		return false;
+	}
+
+	public int isMate(Player player) {
+		InsaneChessPosition modelCopy = new InsaneChessPosition(this);
+		boolean mate = true;
+
+		if(modelCopy.playerToMove != player) {
+			modelCopy.switchPlayerToMove();
+		}
+		for(ChessMove move : modelCopy.getLegalMoves(player)) {
+			if(modelCopy.makeMove(move) != null) {
+				mate = false;
+			}
+		}
+
+		if(mate) {
+			if(isCheck(player)) { //checkmate
+				return 1;
+			} else { //stalemate
+				return 2;
+			}
+		} else { //neither checkmate or stalemate
+			return 0;
+		}
+
+	}
 
 	public BitSet getWhitePieces() {
 		final BitSet allWhitePieces = new BitSet();
@@ -390,47 +474,6 @@ public class InsaneChessPosition {
 		} else {
 			return getBlackPieces();
 		}
-	}
-
-	private boolean isCheck(Player player) {
-		int kingPosition;
-		if(player == WHITE) {
-			kingPosition = whiteKing.nextSetBit(0);
-			if(kingPosition != -1) {
-				return blackLegalLocations.get(kingPosition);
-			}
-		} else {
-			kingPosition = blackKing.nextSetBit(0);
-			if(kingPosition != -1) {
-				return whiteLegalLocations.get(kingPosition);
-			}
-		}
-		return false;
-	}
-
-	public int isMate(Player player) {
-		InsaneChessPosition modelCopy = new InsaneChessPosition(this);
-		boolean mate = true;
-
-		if(modelCopy.playerToMove != player) {
-			modelCopy.switchPlayerToMove();
-		}
-		for(ChessMove move : modelCopy.getLegalMoves(player)) {
-			if(modelCopy.makeMove(move) != null) {
-				mate = false;
-			}
-		}
-
-		if(mate) {
-			if(isCheck(player)) { //checkmate
-				return 1;
-			} else { //stalemate
-				return 2;
-			}
-		} else { //neither checkmate or stalemate
-			return 0;
-		}
-
 	}
 
 	public BitSet getKing(Player player) {
@@ -537,10 +580,6 @@ public class InsaneChessPosition {
 		}
 	}
 
-	public void illustrate() {
-		System.out.println(getAllPieces().toString());
-	}
-
 	private void switchPlayerToMove() {
 		playerToMove = (playerToMove == WHITE) ? BLACK : WHITE;
 	}
@@ -579,6 +618,11 @@ public class InsaneChessPosition {
 
     private void setBlackShortCastlingLegal(boolean blackShortCastlingLegal) {
 		this.blackShortCastlingLegal = blackShortCastlingLegal;
+	}
+
+	@Override
+	public String toString() {
+		return getAllPieces().toString();
 	}
 
 	@Override

@@ -1,5 +1,6 @@
-package insanechess.ai;
+package insanechess.ai.algorithms;
 
+import insanechess.ai.evaluators.ChessEvaluator;
 import insanechess.backend.ChessMove;
 import insanechess.backend.InsaneChessPosition;
 

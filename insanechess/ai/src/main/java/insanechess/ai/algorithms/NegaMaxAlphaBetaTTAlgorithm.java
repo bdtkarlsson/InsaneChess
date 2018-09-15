@@ -1,5 +1,8 @@
-package insanechess.ai;
+package insanechess.ai.algorithms;
 
+import insanechess.ai.EntryFlag;
+import insanechess.ai.TranspositionTableEntry;
+import insanechess.ai.evaluators.ChessEvaluator;
 import insanechess.backend.ChessMove;
 import insanechess.backend.InsaneChessPosition;
 
@@ -29,8 +32,6 @@ public class NegaMaxAlphaBetaTTAlgorithm implements ChessAlgorithm {
 	public ChessMove evaluate(InsaneChessPosition position) {
 		positionsSearched = 0;
 		negaMax(position, searchDepth, Double.MIN_VALUE, Double.MAX_VALUE, true);
-//		System.out.println("NegaMaxAlphaBetaTT positions searched: " + positionsSearched);
-//      System.out.println("size of transposition table: " + transpositionTable.size());
 		return rootBestMove;
 	}
 
@@ -120,5 +121,4 @@ public class NegaMaxAlphaBetaTTAlgorithm implements ChessAlgorithm {
 	public void setEvaluator(ChessEvaluator evaluator) {
 		this.evaluator = evaluator;
 	}
-
 }

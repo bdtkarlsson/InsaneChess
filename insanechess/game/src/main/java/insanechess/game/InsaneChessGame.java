@@ -1,8 +1,8 @@
 package insanechess.game;
 
-import insanechess.ai.ChessAlgorithm;
-import insanechess.ai.InsaneChessEvaluator;
-import insanechess.ai.NegaMaxAlphaBetaAlgorithm;
+import insanechess.ai.algorithms.ChessAlgorithm;
+import insanechess.ai.evaluators.InsaneChessEvaluator;
+import insanechess.ai.algorithms.NegaMaxAlphaBetaAlgorithm;
 import insanechess.backend.ChessMove;
 import insanechess.backend.InsaneChessPosition;
 

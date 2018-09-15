@@ -1,5 +1,6 @@
-package insanechess.ai;
+package insanechess.ai.algorithms;
 
+import insanechess.ai.evaluators.ChessEvaluator;
 import insanechess.backend.ChessMove;
 import insanechess.backend.InsaneChessPosition;
 
@@ -25,7 +26,6 @@ public class NegaMaxAlgorithm implements ChessAlgorithm {
 	public ChessMove evaluate(InsaneChessPosition position) {
         positionsSearched = 0;
 		negaMax(position, searchDepth, true);
-        System.out.println("NegaMax positions searched: " + positionsSearched);
 		return bestMove;
 	}
 
