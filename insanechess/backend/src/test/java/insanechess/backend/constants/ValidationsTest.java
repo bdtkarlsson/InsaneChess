@@ -1,6 +1,5 @@
-package insanechess.constants;
+package insanechess.backend.constants;
 
-import insanechess.backend.constants.Validations;
 import org.junit.jupiter.api.Test;
 
 import java.awt.*;

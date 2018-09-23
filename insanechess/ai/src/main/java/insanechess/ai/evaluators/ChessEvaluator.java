@@ -1,7 +1,7 @@
 package insanechess.ai.evaluators;
 
-import insanechess.backend.InsaneChessPosition;
+import insanechess.backend.ChessPosition;
 
 public interface ChessEvaluator {
-	double evaluate(InsaneChessPosition model);
+	double evaluate(ChessPosition model);
 }

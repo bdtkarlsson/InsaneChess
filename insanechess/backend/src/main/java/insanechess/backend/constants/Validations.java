@@ -4,7 +4,6 @@ import java.awt.*;
 
 public class Validations {
 
-
     private static final Point[] indexToPosition = new Point[64];
     private static final int[][] positionToIndex = new int[8][8];
 

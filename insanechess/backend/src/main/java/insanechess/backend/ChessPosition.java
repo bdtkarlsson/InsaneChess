@@ -12,7 +12,7 @@ import static insanechess.backend.constants.Player.WHITE;
 import static insanechess.backend.constants.Ranks.*;
 
 
-public class InsaneChessPosition {
+public class ChessPosition {
 	private Player playerToMove;
 
 	private BitSet whiteRooks;
@@ -42,22 +42,18 @@ public class InsaneChessPosition {
 	private boolean blackLongCastlingLegal;
 	private boolean blackShortCastlingLegal;
 
-	public InsaneChessPosition() {
+	public ChessPosition() {
 		initializePieces();
-		whiteLegalLocations = new BitSet();
-		blackLegalLocations = new BitSet();
-		blackLegalMoves = new ArrayList<>();
-		whiteLegalMoves = new ArrayList<>();
+		clearMovesAndLocations();
 		whiteLongCastlingLegal = true;
 		whiteShortCastlingLegal = true;
 		blackLongCastlingLegal = true;
 		blackShortCastlingLegal = true;
-		//White players starts
 		playerToMove = WHITE;
 		calculateLegalMoves();
 	}
 
-	public InsaneChessPosition(InsaneChessPosition another) {
+	public ChessPosition(ChessPosition another) {
 		whiteLegalLocations = another.getLegalLocations(WHITE);
 		blackLegalLocations = another.getLegalLocations(BLACK);
 		whiteLegalMoves = new ArrayList<>(another.getLegalMoves(WHITE));
@@ -135,10 +131,10 @@ public class InsaneChessPosition {
 		blackEnPassants = new BitSet();
 	}
 
-	public synchronized InsaneChessPosition makeMove(ChessMove move) {
+	public synchronized ChessPosition makeMove(ChessMove move) {
 
 		BitSet moveBitSet = move.getBitSet();
-		InsaneChessPosition modelCopy = new InsaneChessPosition(this);
+		ChessPosition modelCopy = new ChessPosition(this);
 
 		//If player is white and move is legal
 		if(playerToMove == WHITE && whiteLegalMoves.contains(move)) {
@@ -171,9 +167,9 @@ public class InsaneChessPosition {
 				moveBishop(moveBitSet, modelCopy, BLACK);
 			} else if (blackKing.get(move.getFrom()) && !isBlackCastlingAttempt(move)) {
 				moveBlackKing(moveBitSet, modelCopy);
-			}  else if(blackKing.get(move.getFrom()) && isBlackShortCastlingPossible(move)) {
+			}  else if(blackKing.get(move.getFrom()) && BlackShortCastlingPossible(move)) {
 				moveBlackKingShortCastling(modelCopy);
-			} else if(blackKing.get(move.getFrom()) && isBlackLongCastlingPossible(move)) {
+			} else if(blackKing.get(move.getFrom()) && BlackLongCastlingPossible(move)) {
 				moveBlackKingLongCastling(modelCopy);
 			} else if(blackQueens.get(move.getFrom())) {
 				moveQueen(moveBitSet, modelCopy, BLACK);
@@ -192,17 +188,17 @@ public class InsaneChessPosition {
 		if(modelCopy.isCheck(playerToMove)) {
 			return null;
 		}
-		//Move was legal, swithh player and return next position
+		//Move was legal, switch player and return next position
 		modelCopy.switchPlayerToMove();
 		return modelCopy;
 	}
 
-	private boolean isBlackLongCastlingPossible(ChessMove move) {
+	private boolean BlackLongCastlingPossible(ChessMove move) {
 		return move.getFrom() == 4 && move.getTo() == 0 && isBlackLongCastlingLegal()
 				&& !whiteLegalLocations.get(4) && !whiteLegalLocations.get(3) && !whiteLegalLocations.get(2);
 	}
 
-	private boolean isBlackShortCastlingPossible(ChessMove move) {
+	private boolean BlackShortCastlingPossible(ChessMove move) {
 		return move.getFrom() == 4 && move.getTo() == 7 && isBlackShortCastlingLegal()
 				&& !whiteLegalLocations.get(4) && !whiteLegalLocations.get(5)
 				&& !whiteLegalLocations.get(6);
@@ -229,7 +225,7 @@ public class InsaneChessPosition {
 				!blackLegalLocations.get(62);
 	}
 
-	private void removeWhiteAttackedPieces(ChessMove move, InsaneChessPosition modelCopy) {
+	private void removeWhiteAttackedPieces(ChessMove move, ChessPosition modelCopy) {
 		if(whiteRooks.get(move.getTo())) {
 			modelCopy.getRooks(WHITE).flip(move.getTo());
 		} else if(whiteKnights.get(move.getTo())) {
@@ -245,7 +241,7 @@ public class InsaneChessPosition {
 		}
 	}
 
-	private void moveBlackPawn(ChessMove move, BitSet moveBitSet, InsaneChessPosition modelCopy) {
+	private void moveBlackPawn(ChessMove move, BitSet moveBitSet, ChessPosition modelCopy) {
 		if(RANK_1.get(move.getTo())) {// promotion
 			modelCopy.getPawns(BLACK).flip(move.getFrom());
 			modelCopy.getQueens(BLACK).flip(move.getTo());
@@ -261,7 +257,7 @@ public class InsaneChessPosition {
 		}
 	}
 
-	private void moveBlackKingLongCastling(InsaneChessPosition modelCopy) {
+	private void moveBlackKingLongCastling(ChessPosition modelCopy) {
 		modelCopy.getKing(BLACK).flip(4);
 		modelCopy.getKing(BLACK).flip(2);
 		modelCopy.getRooks(BLACK).flip(0);
@@ -270,7 +266,7 @@ public class InsaneChessPosition {
 		modelCopy.setBlackShortCastlingLegal(false);
 	}
 
-	private void moveBlackKingShortCastling(InsaneChessPosition modelCopy) {
+	private void moveBlackKingShortCastling(ChessPosition modelCopy) {
 		modelCopy.getKing(BLACK).flip(4);
 		modelCopy.getKing(BLACK).flip(6);
 		modelCopy.getRooks(BLACK).flip(7);
@@ -279,13 +275,13 @@ public class InsaneChessPosition {
 		modelCopy.setBlackShortCastlingLegal(false);
 	}
 
-	private void moveBlackKing(BitSet moveBitSet, InsaneChessPosition modelCopy) {
+	private void moveBlackKing(BitSet moveBitSet, ChessPosition modelCopy) {
 		modelCopy.getKing(BLACK).xor(moveBitSet);
 		modelCopy.setBlackLongCastlingLegal(false);
 		modelCopy.setBlackShortCastlingLegal(false);
 	}
 
-	private void moveBlackRook(ChessMove move, BitSet moveBitSet, InsaneChessPosition modelCopy) {
+	private void moveBlackRook(ChessMove move, BitSet moveBitSet, ChessPosition modelCopy) {
 		modelCopy.getRooks(BLACK).xor(moveBitSet);
 		if(move.getFrom() == 7) {// disable short castling
 			modelCopy.setBlackShortCastlingLegal(false);
@@ -294,7 +290,7 @@ public class InsaneChessPosition {
 		}
 	}
 
-	private void removeBlackAttackedPieces(ChessMove move, InsaneChessPosition modelCopy) {
+	private void removeBlackAttackedPieces(ChessMove move, ChessPosition modelCopy) {
 		if(blackRooks.get(move.getTo())) {
 			modelCopy.getRooks(BLACK).flip(move.getTo());
 		} else if(blackKnights.get(move.getTo())) {
@@ -310,12 +306,11 @@ public class InsaneChessPosition {
 		}
 	}
 
-	private void moveWhitePawn(ChessMove move, BitSet moveBitSet, InsaneChessPosition modelCopy) {
+	private void moveWhitePawn(ChessMove move, BitSet moveBitSet, ChessPosition modelCopy) {
 		if(RANK_8.get(move.getTo())) {// promotion
 			modelCopy.getPawns(WHITE).flip(move.getFrom());
 			modelCopy.getQueens(WHITE).flip(move.getTo());
-		} else if(RANK_2.get(move.getFrom())
-				&& RANK_4.get(move.getTo())) { // en passant create
+		} else if(RANK_2.get(move.getFrom()) && RANK_4.get(move.getTo())) { // en passant create
 			modelCopy.getPawns(WHITE).xor(moveBitSet);
 			modelCopy.getEnPassants(WHITE).set(move.getFrom() - 8);
 		} else {// regular pawn move
@@ -326,11 +321,11 @@ public class InsaneChessPosition {
 		}
 	}
 
-	private void moveQueen(BitSet moveBitSet, InsaneChessPosition modelCopy, Player white) {
+	private void moveQueen(BitSet moveBitSet, ChessPosition modelCopy, Player white) {
 		modelCopy.getQueens(white).xor(moveBitSet);
 	}
 
-	private void moveWhiteKingLongCastling(InsaneChessPosition modelCopy) {
+	private void moveWhiteKingLongCastling(ChessPosition modelCopy) {
 		modelCopy.getKing(WHITE).flip(60);
 		modelCopy.getKing(WHITE).flip(58);
 		modelCopy.getRooks(WHITE).flip(56);
@@ -339,7 +334,7 @@ public class InsaneChessPosition {
 		modelCopy.setWhiteShortCastlingLegal(false);
 	}
 
-	private void moveWhiteKingShortCastling(InsaneChessPosition modelCopy) {
+	private void moveWhiteKingShortCastling(ChessPosition modelCopy) {
 		modelCopy.getKing(WHITE).flip(60);
 		modelCopy.getKing(WHITE).flip(62);
 		modelCopy.getRooks(WHITE).flip(63);
@@ -348,21 +343,21 @@ public class InsaneChessPosition {
 		modelCopy.setWhiteShortCastlingLegal(false);
 	}
 
-	private void moveWhiteKing(BitSet moveBitSet, InsaneChessPosition modelCopy) {
+	private void moveWhiteKing(BitSet moveBitSet, ChessPosition modelCopy) {
 		modelCopy.getKing(WHITE).xor(moveBitSet);
 		modelCopy.setWhiteLongCastlingLegal(false);
 		modelCopy.setWhiteShortCastlingLegal(false);
 	}
 
-	private void moveBishop(BitSet moveBitSet, InsaneChessPosition modelCopy, Player white) {
+	private void moveBishop(BitSet moveBitSet, ChessPosition modelCopy, Player white) {
 		modelCopy.getBishops(white).xor(moveBitSet);
 	}
 
-	private void moveKnight(BitSet moveBitSet, InsaneChessPosition modelCopy, Player white) {
+	private void moveKnight(BitSet moveBitSet, ChessPosition modelCopy, Player white) {
 		modelCopy.getKnights(white).xor(moveBitSet);
 	}
 
-	private void moveWhiteRook(ChessMove move, BitSet moveBitSet, InsaneChessPosition modelCopy) {
+	private void moveWhiteRook(ChessMove move, BitSet moveBitSet, ChessPosition modelCopy) {
 		modelCopy.getRooks(WHITE).xor(moveBitSet);
 		if(move.getFrom() == 56) {
 			modelCopy.setWhiteLongCastlingLegal(false);
@@ -372,22 +367,29 @@ public class InsaneChessPosition {
 	}
 
 	private void calculateLegalMoves() {
+		clearMovesAndLocations();
+		if (playerToMove == WHITE) {
+			King.calculateLegalMoves(WHITE, this);
+			Queen.calculateLegalMoves(WHITE, this);
+			Bishop.calculateLegalMoves(WHITE, this);
+			Knight.calculateLegalMoves(WHITE, this);
+			Rook.calculateLegalMoves(WHITE, this);
+			Pawn.calculateLegalMoves(WHITE, this);
+		} else {
+			King.calculateLegalMoves(BLACK, this);
+			Queen.calculateLegalMoves(BLACK, this);
+			Bishop.calculateLegalMoves(BLACK, this);
+			Knight.calculateLegalMoves(BLACK, this);
+			Rook.calculateLegalMoves(BLACK, this);
+			Pawn.calculateLegalMoves(BLACK, this);
+		}
+	}
+
+	private void clearMovesAndLocations() {
 		whiteLegalLocations = new BitSet();
 		blackLegalLocations = new BitSet();
 		blackLegalMoves = new ArrayList<>();
 		whiteLegalMoves = new ArrayList<>();
-		King.calculateLegalMoves(WHITE, this);
-		King.calculateLegalMoves(BLACK, this);
-		Queen.calculateLegalMoves(WHITE, this);
-		Queen.calculateLegalMoves(BLACK, this);
-		Bishop.calculateLegalMoves(WHITE, this);
-		Bishop.calculateLegalMoves(BLACK, this);
-		Knight.calculateLegalMoves(WHITE, this);
-		Knight.calculateLegalMoves(BLACK, this);
-		Rook.calculateLegalMoves(WHITE, this);
-		Rook.calculateLegalMoves(BLACK, this);
-		Pawn.calculateLegalMoves(WHITE, this);
-		Pawn.calculateLegalMoves(BLACK, this);
 	}
 
 	private boolean isCheck(Player player) {
@@ -407,7 +409,7 @@ public class InsaneChessPosition {
 	}
 
 	public int isMate(Player player) {
-		InsaneChessPosition modelCopy = new InsaneChessPosition(this);
+		ChessPosition modelCopy = new ChessPosition(this);
 		boolean mate = true;
 
 		if(modelCopy.playerToMove != player) {
@@ -582,6 +584,7 @@ public class InsaneChessPosition {
 
 	private void switchPlayerToMove() {
 		playerToMove = (playerToMove == WHITE) ? BLACK : WHITE;
+		calculateLegalMoves();
 	}
 
 	public synchronized Player getPlayerToMove() {
@@ -634,7 +637,7 @@ public class InsaneChessPosition {
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
-		InsaneChessPosition that = (InsaneChessPosition) o;
+		ChessPosition that = (ChessPosition) o;
 		return playerToMove == that.playerToMove &&
 				whiteLongCastlingLegal == that.whiteLongCastlingLegal &&
 				whiteShortCastlingLegal == that.whiteShortCastlingLegal &&

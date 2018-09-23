@@ -2,7 +2,7 @@ package insanechess.ai.algorithms;
 
 import insanechess.ai.evaluators.ChessEvaluator;
 import insanechess.backend.ChessMove;
-import insanechess.backend.InsaneChessPosition;
+import insanechess.backend.ChessPosition;
 
 import java.util.Random;
 
@@ -23,14 +23,14 @@ public class NegaMaxAlphaBetaAlgorithm implements ChessAlgorithm {
 	}
 
 	@Override
-	public ChessMove evaluate(InsaneChessPosition position) {
+	public ChessMove evaluate(ChessPosition position) {
 		positionsSearched = 0;
 		negaMax(position, searchDepth, Double.MIN_VALUE, Double.MAX_VALUE, true);
 		//System.out.println("NegaMaxAlphaBeta positions searched: " + positionsSearched);
 		return bestMove;
 	}
 
-	private double negaMax(InsaneChessPosition position, int depth, double alpha, double beta, boolean root) {
+	private double negaMax(ChessPosition position, int depth, double alpha, double beta, boolean root) {
 		positionsSearched++;
 		if (depth <= 0 || position.getLegalMoves(position.getPlayerToMove()).size() == 0) {
 			double val = evaluator.evaluate(position);
@@ -38,7 +38,7 @@ public class NegaMaxAlphaBetaAlgorithm implements ChessAlgorithm {
 		}
 		double bestValue = Long.MIN_VALUE;
 		for (ChessMove move : position.getLegalMoves(position.getPlayerToMove())) {
-			InsaneChessPosition childPosition = position.makeMove(move);
+			ChessPosition childPosition = position.makeMove(move);
 			if(childPosition == null) {
 				continue;
 			}

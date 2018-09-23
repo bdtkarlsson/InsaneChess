@@ -1,8 +1,7 @@
 package insanechess.frontend;
 
 import insanechess.backend.ChessMove;
-import insanechess.backend.InsaneChessPosition;
-import insanechess.backend.constants.Player;
+import insanechess.backend.ChessPosition;
 import insanechess.game.InsaneChessController;
 
 import javax.imageio.ImageIO;
@@ -182,7 +181,7 @@ public class ChessBoardPanel extends JPanel {
 	/**
 	 * Initializes the icons of the initial chess board piece places
 	 */
-	void updateBoard(InsaneChessPosition model) {
+	void updateBoard(ChessPosition model) {
 		BitSet whiteRooks = model.getRooks(WHITE);
 		BitSet blackRooks = model.getRooks(BLACK);
 		BitSet whiteKnights = model.getKnights(WHITE);

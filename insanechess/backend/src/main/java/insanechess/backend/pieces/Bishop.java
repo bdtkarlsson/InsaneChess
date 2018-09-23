@@ -1,8 +1,7 @@
 package insanechess.backend.pieces;
 
-import insanechess.backend.constants.FullEmptySet;
 import insanechess.backend.ChessMove;
-import insanechess.backend.InsaneChessPosition;
+import insanechess.backend.ChessPosition;
 import insanechess.backend.constants.Player;
 
 import java.util.BitSet;
@@ -12,14 +11,12 @@ import static insanechess.backend.constants.Diagonals.ALL_RIGHT_DIAGONALS;
 
 public final class Bishop{
 
-	public static void calculateLegalMoves(Player player, InsaneChessPosition model) {
+	public static void calculateLegalMoves(Player player, ChessPosition model) {
 		BitSet bishops = model.getBishops(player);
 		BitSet alliedPieces = model.getAlliedPieces(player);
 		BitSet enemyPieces = model.getOpponentPieces(player);
 
-		//Loop through all bishops of the correct color
-		for (int bishopLocation = bishops.nextSetBit(0); bishopLocation >= 0; bishopLocation = bishops
-		        .nextSetBit(bishopLocation + 1)) {
+		for (int bishopLocation = bishops.nextSetBit(0); bishopLocation >= 0; bishopLocation = nextBishop(bishops, bishopLocation)) {
 			final BitSet rightDiag = ALL_RIGHT_DIAGONALS.get(bishopLocation);
 			final BitSet leftDiag = ALL_LEFT_DIAGONALS.get(bishopLocation);
 			
@@ -31,9 +28,7 @@ public final class Bishop{
 				if (alliedPieces.get(candidateLocation)) {
 					break;
 				}
-				model.addLegalLocation(player, candidateLocation);
-				model.addLegalMove(player, new ChessMove(bishopLocation,
-				        candidateLocation));
+				addBishopMove(player, model, bishopLocation, candidateLocation);
 				if (enemyPieces.get(candidateLocation)) {
 					break;
 				}
@@ -48,9 +43,7 @@ public final class Bishop{
 				if (alliedPieces.get(candidateLocation)) {
 					break;
 				}
-				model.addLegalLocation(player, candidateLocation);
-				model.addLegalMove(player, new ChessMove(bishopLocation,
-				        candidateLocation));
+				addBishopMove(player, model, bishopLocation, candidateLocation);
 				if (enemyPieces.get(candidateLocation)) {
 					break;
 				}
@@ -65,9 +58,7 @@ public final class Bishop{
 				if (alliedPieces.get(candidateLocation)) {
 					break;
 				}
-				model.addLegalLocation(player, candidateLocation);
-				model.addLegalMove(player, new ChessMove(bishopLocation,
-				        candidateLocation));
+				addBishopMove(player, model, bishopLocation, candidateLocation);
 				if (enemyPieces.get(candidateLocation)) {
 					break;
 				}
@@ -81,14 +72,21 @@ public final class Bishop{
 				if (alliedPieces.get(candidateLocation)) {
 					break;
 				}
-				model.addLegalLocation(player, candidateLocation);
-				model.addLegalMove(player, new ChessMove(bishopLocation,
-				        candidateLocation));
+				addBishopMove(player, model, bishopLocation, candidateLocation);
 				if (enemyPieces.get(candidateLocation)) {
 					break;
 				}
 				candidateLocation += 9;
 			}
 		}
+	}
+
+	private static void addBishopMove(Player player, ChessPosition model, int bishopLocation, int candidateLocation) {
+		model.addLegalLocation(player, candidateLocation);
+		model.addLegalMove(player, new ChessMove(bishopLocation, candidateLocation));
+	}
+
+	private static int nextBishop(BitSet bishops, int bishopLocation) {
+		return bishops.nextSetBit(bishopLocation + 1);
 	}
 }

@@ -1,6 +1,6 @@
 package insanechess.frontend;
 
-import insanechess.backend.InsaneChessPosition;
+import insanechess.backend.ChessPosition;
 import insanechess.game.InsaneChessController;
 import org.jetbrains.annotations.NotNull;
 
@@ -105,7 +105,7 @@ public class ChessGUI {
 		return mainPanel;
 	}
 
-	synchronized void updateChessboard(InsaneChessPosition currentPosition) {
+	synchronized void updateChessboard(ChessPosition currentPosition) {
 		Runnable r = () -> {
 			chessboardPanel.updateBoard(currentPosition);
 			chessboardPanel.repaint();

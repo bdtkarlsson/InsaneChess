@@ -1,6 +1,6 @@
 package insanechess.ai.evaluators;
 
-import insanechess.backend.InsaneChessPosition;
+import insanechess.backend.ChessPosition;
 
 import java.util.BitSet;
 
@@ -19,7 +19,7 @@ public class InsaneChessEvaluator implements ChessEvaluator {
 	/*Position value tables. Each piece has its own table with predetermined values for 
 	 * the different positions*/
 	
-	private static final short[] WHITEPAWNTABLE = {
+	private static final double[] WHITEPAWNTABLE = {
 		0,  0,  0,  0,  0,  0,  0,  0,
 		50, 50, 50, 50, 50, 50, 50, 50,
 		10, 10, 20, 30, 30, 20, 10, 10,
@@ -30,7 +30,7 @@ public class InsaneChessEvaluator implements ChessEvaluator {
 		0,  0,  0,  0,  0,  0,  0,  0
 	};
 
-	private static final short[] BLACKPAWNTABLE = {
+	private static final double[] BLACKPAWNTABLE = {
 		0,  0,  0,  0,  0,  0,  0,  0,
 		5, 10, 10,-20,-20, 10, 10,  5,
 		5, -5,-10,  0,  0,-10, -5,  5,
@@ -41,7 +41,7 @@ public class InsaneChessEvaluator implements ChessEvaluator {
 		0,  0,  0,  0,  0,  0,  0,  0
 	};
 
-	private static final short[] WHITEKNIGHTTABLE = {
+	private static final double[] WHITEKNIGHTTABLE = {
 		-50,-40,-30,-30,-30,-30,-40,-50,
 		-40,-20,  0,  0,  0,  0,-20,-40,
 		-30,  0, 10, 15, 15, 10,  0,-30,
@@ -52,7 +52,7 @@ public class InsaneChessEvaluator implements ChessEvaluator {
 		-50,-40,-30,-30,-30,-30,-40,-50
 	};
 
-	private static final short[] BLACKKNIGHTTABLE = {
+	private static final double[] BLACKKNIGHTTABLE = {
 		-50,-40,-30,-30,-30,-30,-40,-50,
 		-40,-20,  0,  5,  5,  0,-20,-40,
 		-30,  5, 10, 15, 15, 10,  5,-30,
@@ -64,7 +64,7 @@ public class InsaneChessEvaluator implements ChessEvaluator {
 	};
 
 
-	private static final short[] WHITEBISHOPTABLE = {
+	private static final double[] WHITEBISHOPTABLE = {
 		-20,-10,-10,-10,-10,-10,-10,-20,
 		-10,  0,  0,  0,  0,  0,  0,-10,
 		-10,  0,  5, 10, 10,  5,  0,-10,
@@ -75,7 +75,7 @@ public class InsaneChessEvaluator implements ChessEvaluator {
 		-20,-10,-10,-10,-10,-10,-10,-20
 	};
 
-	private static final short[] BLACKBISHOPTABLE = {
+	private static final double[] BLACKBISHOPTABLE = {
 
 		-20,-10,-10,-10,-10,-10,-10,-20,
 		-10,  5,  0,  0,  0,  0,  5,-10,
@@ -87,7 +87,7 @@ public class InsaneChessEvaluator implements ChessEvaluator {
 		-20,-10,-10,-10,-10,-10,-10,-20
 	};
 
-	private static final short[] WHITEROOKTABLE = {
+	private static final double[] WHITEROOKTABLE = {
 		 0,  0,  0,  0,  0,  0,  0,  0,
 		 5, 10, 10, 10, 10, 10, 10,  5,
 		-5,  0,  0,  0,  0,  0,  0, -5,
@@ -98,7 +98,7 @@ public class InsaneChessEvaluator implements ChessEvaluator {
 		 0,  0,  0,  5,  5,  0,  0,  0
 	};
 
-	private static final short[] BLACKROOKTABLE = {
+	private static final double[] BLACKROOKTABLE = {
 		 0,  0,  0,  5,  5,  0,  0,  0,
 		-5,  0,  0,  0,  0,  0,  0, -5,
 		-5,  0,  0,  0,  0,  0,  0, -5,
@@ -109,7 +109,7 @@ public class InsaneChessEvaluator implements ChessEvaluator {
 		 0,  0,  0,  0,  0,  0,  0,  0
 	};
 
-	private static final short[] WHITEQUEENTABLE = {
+	private static final double[] WHITEQUEENTABLE = {
 		-20,-10,-10, -5, -5,-10,-10,-20,
 		-10,  0,  0,  0,  0,  0,  0,-10,
 		-10,  0,  5,  5,  5,  5,  0,-10,
@@ -120,7 +120,7 @@ public class InsaneChessEvaluator implements ChessEvaluator {
 		-20,-10,-10, -5, -5,-10,-10,-20
 	};
 
-	private static final short[] BLACKQUEENTABLE = {
+	private static final double[] BLACKQUEENTABLE = {
 		-20,-10,-10, -5, -5,-10,-10,-20,
 		-10,  0,  0,  0,  0,  5,  0,-10,
 		-10,  0,  5,  5,  5,  5,  5,-10,
@@ -132,7 +132,7 @@ public class InsaneChessEvaluator implements ChessEvaluator {
 
 	};
 
-	private static final short[] WHITEKINGMIDDLETABLE = {
+	private static final double[] WHITEKINGMIDDLETABLE = {
 		-30,-40,-40,-50,-50,-40,-40,-30,
 		-30,-40,-40,-50,-50,-40,-40,-30,
 		-30,-40,-40,-50,-50,-40,-40,-30,
@@ -143,7 +143,7 @@ public class InsaneChessEvaluator implements ChessEvaluator {
 		 20, 30, 10,  0,  0, 10, 30, 20
 	};
 	
-	private static final short[] BLACKKINGMIDDLETABLE = {
+	private static final double[] BLACKKINGMIDDLETABLE = {
 		
 		 20, 30, 10,  0,  0, 10, 30, 20,
 		 20, 20,  0,  0,  0,  0, 20, 20,
@@ -156,7 +156,7 @@ public class InsaneChessEvaluator implements ChessEvaluator {
 	};
 
 
-	private static final short[] WHITEKINGENDTABLE = {
+	private static final double[] WHITEKINGENDTABLE = {
 		-50,-40,-30,-20,-20,-30,-40,-50,
 		-30,-20,-10,  0,  0,-10,-20,-30,
 		-30,-10, 20, 30, 30, 20,-10,-30,
@@ -167,7 +167,7 @@ public class InsaneChessEvaluator implements ChessEvaluator {
 		-50,-30,-30,-30,-30,-30,-30,-50
 	};
 	
-	private static final short[] BLACKKINGENDTABLE = {
+	private static final double[] BLACKKINGENDTABLE = {
 		-50,-30,-30,-30,-30,-30,-30,-50,
 		-30,-30,  0,  0,  0,  0,-30,-30,
 		-30,-10, 20, 30, 30, 20,-10,-30,
@@ -179,25 +179,25 @@ public class InsaneChessEvaluator implements ChessEvaluator {
 	};
 	
 	/*Value for each possible move*/
-	private static final int NROFMOVESVALUE = 10;
+	private static final double NROFMOVESVALUE = 10;
 	/*Special pawn values*/
-	private static final int BACKWARDPAWNVALUE = -50;
-	private static final int DOUBLEDPAWNVALUE = -50;
-	private static final int ISOLATEDPAWNVALUE = -50;
+	private static final double BACKWARDPAWNVALUE = -50;
+	private static final double DOUBLEDPAWNVALUE = -50;
+	private static final double ISOLATEDPAWNVALUE = -50;
 	/*Piece values*/
-	private static final int PAWNVALUE = 100;
-	private static final int ROOKVALUE = 500;
-	private static final int BISHOPVALUE = 330;
-	private static final int KNIGHTVALUE = 320;
-	private static final int QUEENVALUE = 900;
-	private static final int KINGVALUE = 20000;
+	private static final double PAWNVALUE = 100;
+	private static final double ROOKVALUE = 500;
+	private static final double BISHOPVALUE = 330;
+	private static final double KNIGHTVALUE = 320;
+	private static final double QUEENVALUE = 900;
+	private static final double KINGVALUE = 20000;
 	/*The end criteria which triggers the use of the end table 
 	 * instead of the regular table for kings*/
-	private static final int ENDCRITERIA = 1300;
+	private static final double ENDCRITERIA = 1300;
 
 
 	@Override
-	public synchronized double evaluate(InsaneChessPosition position) {
+	public synchronized double evaluate(ChessPosition position) {
 		double specialValue = 0;
 		double whitePieceValue = 0;
 		double blackPieceValue = 0;
@@ -221,14 +221,13 @@ public class InsaneChessEvaluator implements ChessEvaluator {
 		for (int pawnLocation = whitePawns.nextSetBit(0); pawnLocation >= 0; pawnLocation = whitePawns
 				.nextSetBit(pawnLocation + 1)) {
 
-
 			specialValue += WHITEPAWNTABLE[pawnLocation];
 
 			/*Doubled pawns*/
 			BitSet pawnFile = (BitSet) ALL_FILES.get(pawnLocation).clone();
 			pawnFile.and(whitePawns);
 			if(pawnFile.cardinality() > 1) {
-				specialValue += (pawnFile.cardinality()-1) * DOUBLEDPAWNVALUE/2;
+				specialValue += (pawnFile.cardinality() - 1) * DOUBLEDPAWNVALUE / 2;
 			}
 
 			/*Isolated pawns*/

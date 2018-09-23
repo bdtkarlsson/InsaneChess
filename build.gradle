@@ -41,7 +41,6 @@ buildscript {
         mavenCentral() // For the plugin classpath dependencies listed below
         jcenter() // Kotlin
     }
-
     dependencies {
         // Allows us to use the Kotlin plugin in "subprojects"
         classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.2.61'

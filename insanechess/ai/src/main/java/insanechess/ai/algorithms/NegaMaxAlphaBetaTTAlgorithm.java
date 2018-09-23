@@ -4,7 +4,7 @@ import insanechess.ai.EntryFlag;
 import insanechess.ai.TranspositionTableEntry;
 import insanechess.ai.evaluators.ChessEvaluator;
 import insanechess.backend.ChessMove;
-import insanechess.backend.InsaneChessPosition;
+import insanechess.backend.ChessPosition;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,7 +19,7 @@ public class NegaMaxAlphaBetaTTAlgorithm implements ChessAlgorithm {
 	private ChessMove rootBestMove;
 	private Random rand;
 	private long positionsSearched;
-	private Map<InsaneChessPosition, TranspositionTableEntry> transpositionTable;
+	private Map<ChessPosition, TranspositionTableEntry> transpositionTable;
 
 	public NegaMaxAlphaBetaTTAlgorithm(ChessEvaluator evaluator, int searchDepth) {
 		this.searchDepth = searchDepth;
@@ -29,13 +29,13 @@ public class NegaMaxAlphaBetaTTAlgorithm implements ChessAlgorithm {
 	}
 
 	@Override
-	public ChessMove evaluate(InsaneChessPosition position) {
+	public ChessMove evaluate(ChessPosition position) {
 		positionsSearched = 0;
 		negaMax(position, searchDepth, Double.MIN_VALUE, Double.MAX_VALUE, true);
 		return rootBestMove;
 	}
 
-	private double negaMax(InsaneChessPosition position, int depth, double alpha, double beta, boolean root) {
+	private double negaMax(ChessPosition position, int depth, double alpha, double beta, boolean root) {
 
 		double alphaOrig = alpha;
         if (!root) {
@@ -64,7 +64,7 @@ public class NegaMaxAlphaBetaTTAlgorithm implements ChessAlgorithm {
 		}
 		double bestValue = Long.MIN_VALUE;
 		for (ChessMove move : position.getLegalMoves(position.getPlayerToMove())) {
-			InsaneChessPosition childPosition = position.makeMove(move);
+			ChessPosition childPosition = position.makeMove(move);
 			if(childPosition == null) {
 				continue;
 			}
@@ -92,7 +92,7 @@ public class NegaMaxAlphaBetaTTAlgorithm implements ChessAlgorithm {
 	}
 
 
-	private void putInTable(InsaneChessPosition position, TranspositionTableEntry entry) {
+	private void putInTable(ChessPosition position, TranspositionTableEntry entry) {
 		TranspositionTableEntry existingEntry = transpositionTable.get(position);
 		if (existingEntry == null) {
 			transpositionTable.put(position, entry);

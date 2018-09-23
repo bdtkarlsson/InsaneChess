@@ -4,7 +4,7 @@ import insanechess.ai.algorithms.ChessAlgorithm;
 import insanechess.ai.evaluators.InsaneChessEvaluator;
 import insanechess.ai.algorithms.NegaMaxAlphaBetaAlgorithm;
 import insanechess.backend.ChessMove;
-import insanechess.backend.InsaneChessPosition;
+import insanechess.backend.ChessPosition;
 
 import static insanechess.backend.constants.Player.BLACK;
 import static insanechess.backend.constants.Player.WHITE;
@@ -12,7 +12,7 @@ import static insanechess.backend.constants.Player.WHITE;
 public class InsaneChessGame {
 
 	private InsaneChessSettings settings;
-	private InsaneChessPosition model;
+	private ChessPosition model;
 	private ChessAlgorithm whiteAI;
 	private ChessAlgorithm blackAI;
 	private int movesSinceLastAttack;
@@ -27,11 +27,11 @@ public class InsaneChessGame {
 		movesSinceLastAttack = 0;
 		whiteAI = new NegaMaxAlphaBetaAlgorithm(new InsaneChessEvaluator(), settings.getWhiteAIDepth());
 		blackAI = new NegaMaxAlphaBetaAlgorithm(new InsaneChessEvaluator(), settings.getBlackAIDepth());
-		model = new InsaneChessPosition();
+		model = new ChessPosition();
 		gameThread = new GameThread();
 	}
 
-	InsaneChessPosition getModel() {
+	ChessPosition getModel() {
 		return model;
 	}
 
@@ -41,7 +41,7 @@ public class InsaneChessGame {
 
 	synchronized void makeMove(ChessMove move) {
 
-		InsaneChessPosition newModel = getModel().makeMove(move);
+		ChessPosition newModel = getModel().makeMove(move);
 		if(newModel != null) {
 			int nrOfPieces = getModel().getOpponentPieces(getModel().getPlayerToMove()).cardinality();
 			this.model = newModel;

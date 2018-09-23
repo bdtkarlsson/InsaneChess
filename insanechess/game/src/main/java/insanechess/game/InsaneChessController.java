@@ -1,7 +1,7 @@
 package insanechess.game;
 
 import insanechess.backend.ChessMove;
-import insanechess.backend.InsaneChessPosition;
+import insanechess.backend.ChessPosition;
 import insanechess.backend.constants.Player;
 
 public class InsaneChessController{
@@ -25,7 +25,7 @@ public class InsaneChessController{
 		game.makeMove(move);
 	}
 
-	public synchronized InsaneChessPosition  getCurrentPosition() {
+	public synchronized ChessPosition getCurrentPosition() {
 		return game.getModel();
 	}
 

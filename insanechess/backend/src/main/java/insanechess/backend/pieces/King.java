@@ -2,7 +2,7 @@ package insanechess.backend.pieces;
 
 import insanechess.backend.constants.FullEmptySet;
 import insanechess.backend.ChessMove;
-import insanechess.backend.InsaneChessPosition;
+import insanechess.backend.ChessPosition;
 import insanechess.backend.constants.Player;
 
 import java.util.BitSet;
@@ -13,12 +13,12 @@ import static insanechess.backend.constants.Player.BLACK;
 import static insanechess.backend.constants.Player.WHITE;
 import static insanechess.backend.constants.Validations.isValidTile;
 
-public final class King{
+public final class King {
 
 	private King() {
 	}
 
-	public static void calculateLegalMoves(Player player, InsaneChessPosition model) {
+	public static void calculateLegalMoves(Player player, ChessPosition model) {
 		BitSet king = model.getKing(player);
 		int kingLocation = king.nextSetBit(0);
 		BitSet alliedPieces = model.getAlliedPieces(player);
@@ -106,27 +106,24 @@ public final class King{
 		return isValidTile(possibleTargetLocation) && !alliedPieces.get(possibleTargetLocation);
 	}
 
-	private static void addRegularKingMove(Player player, InsaneChessPosition model, int kingLocation, int possibleTargetLocation) {
-		model.addLegalMove(player, new ChessMove(kingLocation,
-				possibleTargetLocation));
+	private static void addRegularKingMove(Player player, ChessPosition model, int kingLocation, int possibleTargetLocation) {
+		model.addLegalMove(player, new ChessMove(kingLocation, possibleTargetLocation));
 		model.addLegalLocation(player, possibleTargetLocation);
 	}
 
-	private static boolean isBlackLongCastling(Player player, InsaneChessPosition model, BitSet allPieces) {
-		return player == BLACK && model.isBlackLongCastlingLegal() && !allPieces.get(1) && !allPieces.get(2) &&
-				!allPieces.get(3);
+	private static boolean isBlackLongCastling(Player player, ChessPosition model, BitSet allPieces) {
+		return player == BLACK && model.isBlackLongCastlingLegal() && !allPieces.get(1) && !allPieces.get(2) && !allPieces.get(3);
 	}
 
-	private static boolean isBlackShortCastling(Player player, InsaneChessPosition model, BitSet allPieces) {
+	private static boolean isBlackShortCastling(Player player, ChessPosition model, BitSet allPieces) {
 		return player == BLACK && model.isBlackShortCastlingLegal() && !allPieces.get(5) && !allPieces.get(6);
 	}
 
-	private static boolean isWhiteLongCastling(Player player, InsaneChessPosition model, BitSet allPieces) {
-		return player == WHITE && model.isWhiteLongCastlingLegal() && !allPieces.get(57) && !allPieces.get(58) &&
-				!allPieces.get(59);
+	private static boolean isWhiteLongCastling(Player player, ChessPosition model, BitSet allPieces) {
+		return player == WHITE && model.isWhiteLongCastlingLegal() && !allPieces.get(57) && !allPieces.get(58) && !allPieces.get(59);
 	}
 
-	private static boolean isWhiteShortCastling(Player player, InsaneChessPosition model, BitSet allPieces) {
+	private static boolean isWhiteShortCastling(Player player, ChessPosition model, BitSet allPieces) {
 		return player == WHITE && model.isWhiteShortCastlingLegal() && !allPieces.get(61) && !allPieces.get(62);
 	}
 }
